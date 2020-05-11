@@ -19,3 +19,5 @@ if (mix.inProduction()){
 }
 
 mix.browserSync("nadias.test");
+
+mix.disableNotifications();
