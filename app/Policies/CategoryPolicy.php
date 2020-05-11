@@ -10,6 +10,12 @@ class CategoryPolicy
 {
     use HandlesAuthorization;
 
+    public function before($user, $ability)
+    {
+        if ($user->id_admin) {
+            return true;
+        }
+    }
     /**
      * Determine whether the user can view any models.
      *
@@ -22,15 +28,14 @@ class CategoryPolicy
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Determine whether the user can manage categories.
      *
      * @param  \App\User  $user
-     * @param  \App\Category  $category
      * @return mixed
      */
-    public function view(User $user, Category $category)
+    public function manage(User $user)
     {
-        //
+        return $user->is_admin;
     }
 
     /**
