@@ -1925,16 +1925,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["initialCategories"],
   data: function data() {
     return {
-      categories: _.cloneDeep(this.initialCategories)
+      categories: _.cloneDeep(this.initialCategories),
+      feedback: ""
     };
   },
   methods: {
     removeCategory: function removeCategory(index) {
       if (confirm("Are you sure ?")) {
+        var id = this.categories[index].id;
+
+        if (id > 0) {
+          axios["delete"]("/api/categories/" + id);
+        }
+
         this.categories.splice(index, 1);
       }
     },
@@ -1945,12 +1954,24 @@ __webpack_require__.r(__webpack_exports__);
         id: 0,
         name: "",
         image: "",
-        display: this.categories.length + 1
+        display_order: this.categories.length + 1
       });
       this.$nextTick(function () {
         window.scrollTo(0, document.body.scrollHeight);
 
         _this.$refs[""][0].focus();
+      });
+    },
+    saveCategories: function saveCategories() {
+      var _this2 = this;
+
+      axios.post("/api/categories/upsert", {
+        categories: this.categories
+      }).then(function (res) {
+        if (res.data.success) {
+          _this2.feedback = "Changes saved";
+          _this2.categories = res.data.categories;
+        }
       });
     }
   }
@@ -38282,6 +38303,14 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "form",
+    {
+      on: {
+        submit: function($event) {
+          $event.preventDefault()
+          return _vm.saveCategories($event)
+        }
+      }
+    },
     [
       _c("a", { staticClass: "add", on: { click: _vm.addCategory } }, [
         _vm._v("+ Add Category")
@@ -38375,7 +38404,11 @@ var render = function() {
           _vm._v(" "),
           _c("hr")
         ])
-      })
+      }),
+      _vm._v(" "),
+      _c("button", { attrs: { type: "submit" } }, [_vm._v("Save")]),
+      _vm._v(" "),
+      _c("div", [_vm._v(_vm._s(_vm.feedback))])
     ],
     2
   )
