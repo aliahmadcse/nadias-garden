@@ -15,7 +15,18 @@ class CreateMenuItemsTable extends Migration
     {
         Schema::create('menu_items', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 128);
+            $table->string('description', 512);
+            $table->decimal('price');
+            $table->string('image', 255);
+            $table->unsignedBigInteger('category_id');
+
             $table->timestamps();
+
+            $table->foreign('category_id')
+                ->references('id')
+                ->on('categories')
+                ->onDelete('cascade');
         });
     }
 
