@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,3 +17,13 @@ Route::post('/categories/upsert', "CategoryController@upsert");
 
 Route::delete('/categories/{category}', 'CategoryController@destroy');
 
+Route::post('/menu-items/upsert', 'MenuItemController@store');
+
+Route::post('/add-image', function (Request $request) {
+    $file = $request->file('file');
+    $dir = "public/images";
+    $path = $file->store($dir);
+    // returning just the newly created unique file name, instead
+    // of complete path
+    return str_replace("$dir/", "", $path);
+});
