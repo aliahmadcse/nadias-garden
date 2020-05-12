@@ -1,12 +1,53 @@
 <template>
     <div>
         <h1>Menu Editor</h1>
+
+        <router-link :to="{ name:'categories' }">Categories</router-link>
+
+        <router-link :to="{ name:'add-item' }">Add Item</router-link>
+
+        <router-view :initial-categories="categories"></router-view>
     </div>
 </template>
 
 <script>
-export default {};
+import VueRouter from "vue-router";
+import CategoryManager from "./CategoryManager";
+import MenuItem from "./MenuItem";
+Vue.use(VueRouter);
+export default {
+    props: ["categories"],
+
+    router: new VueRouter({
+        routes: [
+            {
+                path: "/category",
+                name: "categories",
+                component: CategoryManager
+            },
+            {
+                path: "/",
+                redirect: { name: "categories" }
+            },
+            {
+                path: "/add-item",
+                name: "add-item",
+                component: MenuItem
+            }
+        ]
+    })
+};
 </script>
 
 <style lang="scss" scoped>
+a {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 0;
+}
+.router-link-active {
+    font-weight: bold;
+    border-bottom:none;
+    
+}
 </style>
