@@ -27,3 +27,5 @@ Route::post('/add-image', function (Request $request) {
     // of complete path
     return str_replace("$dir/", "", $path);
 });
+
+Route::get('categories/{category}/items', "CategoryController@items");

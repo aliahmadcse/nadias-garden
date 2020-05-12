@@ -4,10 +4,11 @@
 
         <router-link :to="{ name:'categories' }">Categories</router-link>
 
+        <router-link :to="{ name:'items' }">Items</router-link>
+
         <router-link :to="{ name:'add-item' }">Add Item</router-link>
-        
+
         <router-view class="view-router" :initial-categories="categories"></router-view>
-        
     </div>
 </template>
 
@@ -15,6 +16,7 @@
 import VueRouter from "vue-router";
 import CategoryManager from "./CategoryManager";
 import MenuItem from "./MenuItem";
+import MenuItemList from "./MenuItemList";
 Vue.use(VueRouter);
 export default {
     props: ["categories"],
@@ -31,6 +33,17 @@ export default {
             {
                 path: "/",
                 redirect: { name: "categories" }
+            },
+            {
+                path: "/items",
+                name: "items",
+                component: MenuItemList
+            },
+            {
+                path: "/edit-item/:id",
+                name: "edit-item",
+                component: MenuItem,
+                props: true
             },
             {
                 path: "/add-item",
@@ -56,7 +69,7 @@ a {
     font-weight: bold;
     border-bottom: none;
 }
-.view-router{
+.view-router {
     margin-top: 40px;
 }
 </style>
