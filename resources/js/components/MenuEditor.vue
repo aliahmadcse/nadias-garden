@@ -5,8 +5,9 @@
         <router-link :to="{ name:'categories' }">Categories</router-link>
 
         <router-link :to="{ name:'add-item' }">Add Item</router-link>
-
-        <router-view :initial-categories="categories"></router-view>
+        
+        <router-view class="view-router" :initial-categories="categories"></router-view>
+        
     </div>
 </template>
 
@@ -19,6 +20,8 @@ export default {
     props: ["categories"],
 
     router: new VueRouter({
+        mode: "history",
+        base: "menu-editor",
         routes: [
             {
                 path: "/category",
@@ -33,6 +36,10 @@ export default {
                 path: "/add-item",
                 name: "add-item",
                 component: MenuItem
+            },
+            {
+                path: "*",
+                redirect: "/"
             }
         ]
     })
@@ -43,11 +50,13 @@ export default {
 a {
     border: 1px solid black;
     padding: 10px;
-    margin: 0;
+    margin: 0px;
 }
 .router-link-active {
     font-weight: bold;
-    border-bottom:none;
-    
+    border-bottom: none;
+}
+.view-router{
+    margin-top: 40px;
 }
 </style>

@@ -2003,6 +2003,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -2010,6 +2011,8 @@ Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["categories"],
   router: new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
+    mode: "history",
+    base: "menu-editor",
     routes: [{
       path: "/category",
       name: "categories",
@@ -2023,6 +2026,9 @@ Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
       path: "/add-item",
       name: "add-item",
       component: _MenuItem__WEBPACK_IMPORTED_MODULE_2__["default"]
+    }, {
+      path: "*",
+      redirect: "/"
     }]
   })
 });
@@ -2042,7 +2048,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["initial-categories"],
+  data: function data() {
+    return {
+      item: {
+        name: "",
+        price: 0.0,
+        image: "",
+        category_id: "",
+        description: ""
+      },
+      errors: []
+    };
+  },
+  methods: {
+    save: function save() {}
+  }
+});
 
 /***/ }),
 
@@ -6608,7 +6650,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "a[data-v-45aa5657] {\n  border: 1px solid black;\n  padding: 10px;\n  margin: 0;\n}\n.router-link-active[data-v-45aa5657] {\n  font-weight: bold;\n  border-bottom: none;\n}", ""]);
+exports.push([module.i, "a[data-v-45aa5657] {\n  border: 1px solid black;\n  padding: 10px;\n  margin: 0px;\n}\n.router-link-active[data-v-45aa5657] {\n  font-weight: bold;\n  border-bottom: none;\n}\n.view-router[data-v-45aa5657] {\n  margin-top: 40px;\n}", ""]);
 
 // exports
 
@@ -38531,7 +38573,10 @@ var render = function() {
         _vm._v("Add Item")
       ]),
       _vm._v(" "),
-      _c("router-view", { attrs: { "initial-categories": _vm.categories } })
+      _c("router-view", {
+        staticClass: "view-router",
+        attrs: { "initial-categories": _vm.categories }
+      })
     ],
     1
   )
@@ -38558,7 +38603,144 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("form", [_vm._v("Add/Edit Item")])
+  return _c(
+    "form",
+    {
+      staticClass: "item-form",
+      on: {
+        submit: function($event) {
+          $event.preventDefault()
+          return _vm.save($event)
+        }
+      }
+    },
+    [
+      _c("div", [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.item.name,
+              expression: "item.name"
+            }
+          ],
+          attrs: { type: "text", placeholder: "Item name", required: "" },
+          domProps: { value: _vm.item.name },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.item, "name", $event.target.value)
+            }
+          }
+        }),
+        _vm._v("\n        $\n        "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.item.price,
+              expression: "item.price"
+            }
+          ],
+          attrs: { type: "number", min: "0", step: ".01", required: "" },
+          domProps: { value: _vm.item.price },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.item, "price", $event.target.value)
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", [
+        _c("textarea", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.item.description,
+              expression: "item.description"
+            }
+          ],
+          attrs: { placeholder: "Item description", required: "" },
+          domProps: { value: _vm.item.description },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.item, "description", $event.target.value)
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", [
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.item.category_id,
+                expression: "item.category_id"
+              }
+            ],
+            attrs: { required: "" },
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.$set(
+                  _vm.item,
+                  "category_id",
+                  $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                )
+              }
+            }
+          },
+          [
+            _c("option", { attrs: { value: "" } }, [
+              _vm._v("Select a category")
+            ]),
+            _vm._v(" "),
+            _vm._l(_vm.initialCategories, function(cat) {
+              return _c(
+                "option",
+                { key: cat.id, domProps: { value: cat.id } },
+                [_vm._v(_vm._s(cat.name))]
+              )
+            })
+          ],
+          2
+        )
+      ]),
+      _vm._v(" "),
+      _c("button", { attrs: { type: "submit" } }, [_vm._v("Save")]),
+      _vm._v(" "),
+      _c(
+        "ul",
+        _vm._l(_vm.errors, function(error, index) {
+          return _c("li", { key: index }, [_vm._v(_vm._s(error))])
+        }),
+        0
+      )
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

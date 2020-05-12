@@ -20,5 +20,6 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Route::resource('categories', 'CategoryController');
 
-Route::get('/menu-editor', 'AdminController@menu')
-    ->middleware("can:edit-menu");
+Route::get('/menu-editor/{any?}', 'AdminController@menu')
+    ->middleware("can:edit-menu")
+    ->where('any', '.*');
