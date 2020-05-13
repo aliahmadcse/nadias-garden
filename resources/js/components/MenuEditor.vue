@@ -8,7 +8,7 @@
 
         <router-link :to="{ name:'add-item' }">Add Item</router-link>
 
-        <router-view class="view-router" :initial-categories="categories"></router-view>
+        <router-view class="view-router"></router-view>
     </div>
 </template>
 
@@ -17,9 +17,16 @@ import VueRouter from "vue-router";
 import CategoryManager from "./CategoryManager";
 import MenuItem from "./MenuItem";
 import MenuItemList from "./MenuItemList";
+import store from "../store";
 Vue.use(VueRouter);
 export default {
-    props: ["categories",],
+    store,
+
+    props: ["categories"],
+
+    created: function() {
+        this.$store.commit("SET_CATEGORIES", _.cloneDeep(this.categories));
+    },
 
     router: new VueRouter({
         mode: "history",

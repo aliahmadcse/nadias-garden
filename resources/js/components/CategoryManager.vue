@@ -19,13 +19,16 @@
 
 <script>
 export default {
-    props: ["initialCategories"],
-
     data: function() {
         return {
-            categories: _.cloneDeep(this.initialCategories),
             feedback: ""
         };
+    },
+
+    computed: {
+        categories: function() {
+            return this.$store.state.categories;
+        }
     },
 
     methods: {
