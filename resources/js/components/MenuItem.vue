@@ -14,7 +14,9 @@
                 <option v-for="cat in initialCategories" :value="cat.id" :key="cat.id">{{cat.name}}</option>
             </select>
         </div>
+        <img v-if="id && item.image" :src="`/storage/images/${item.image}`" width="200" />
         <drop-zone :options="dropzoneOptions" id="dz" ref="dropzone"></drop-zone>
+
         <button type="submit">Save</button>
         <ul>
             <li v-for="(error, index) in errors" :key="index">{{error}}</li>
@@ -26,7 +28,7 @@
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 export default {
-    props: ["initial-categories"],
+    props: ["initial-categories", "id"],
 
     components: {
         dropZone: vue2Dropzone
@@ -55,14 +57,27 @@ export default {
             errors: []
         };
     },
+
+    created: function() {
+        if (this.id) {
+            axios
+                .get("/api/menu-items/" + this.id)
+                .then(res => (this.item = res.data));
+        }
+    },
+
     methods: {
         save() {
             let files = this.$refs.dropzone.getAcceptedFiles();
             if (files.length > 0 && files[0].filename) {
                 this.item.image = files[0].filename;
             }
+            let url = "/api/menu-items/upsert";
+            if (this.id) {
+                url = "/api/menu-items/" + this.id;
+            }
             axios
-                .post("/api/menu-items/upsert", this.item)
+                .post(url, this.item)
                 .then(res => {
                     this.$router.push("/");
                 })

@@ -19,7 +19,7 @@ import MenuItem from "./MenuItem";
 import MenuItemList from "./MenuItemList";
 Vue.use(VueRouter);
 export default {
-    props: ["categories"],
+    props: ["categories",],
 
     router: new VueRouter({
         mode: "history",

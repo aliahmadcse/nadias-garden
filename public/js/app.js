@@ -2096,10 +2096,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["initial-categories"],
+  props: ["initial-categories", "id"],
   components: {
     dropZone: vue2_dropzone__WEBPACK_IMPORTED_MODULE_0___default.a
   },
@@ -2125,9 +2127,18 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       errors: []
     };
   },
+  created: function created() {
+    var _this = this;
+
+    if (this.id) {
+      axios.get("/api/menu-items/" + this.id).then(function (res) {
+        return _this.item = res.data;
+      });
+    }
+  },
   methods: {
     save: function save() {
-      var _this = this;
+      var _this2 = this;
 
       var files = this.$refs.dropzone.getAcceptedFiles();
 
@@ -2135,8 +2146,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         this.item.image = files[0].filename;
       }
 
-      axios.post("/api/menu-items/upsert", this.item).then(function (res) {
-        _this.$router.push("/");
+      var url = "/api/menu-items/upsert";
+
+      if (this.id) {
+        url = "/api/menu-items/" + this.id;
+      }
+
+      axios.post(url, this.item).then(function (res) {
+        _this2.$router.push("/");
       })["catch"](function (error) {
         var _ref;
 
@@ -2147,7 +2164,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         // key in a single array, value is being an array here
         var messages = Object.values(error.response.data.errors); // we now need to form a single array from this 2D array
 
-        _this.errors = (_ref = []).concat.apply(_ref, _toConsumableArray(messages));
+        _this2.errors = (_ref = []).concat.apply(_ref, _toConsumableArray(messages));
       });
     }
   }
@@ -38867,6 +38884,12 @@ var render = function() {
           2
         )
       ]),
+      _vm._v(" "),
+      _vm.id && _vm.item.image
+        ? _c("img", {
+            attrs: { src: "/storage/images/" + _vm.item.image, width: "200" }
+          })
+        : _vm._e(),
       _vm._v(" "),
       _c("drop-zone", {
         ref: "dropzone",
