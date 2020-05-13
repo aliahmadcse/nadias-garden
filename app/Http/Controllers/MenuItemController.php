@@ -2,25 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MenuItemPost;
 use Illuminate\Http\Request;
 use App\MenuItem;
 
 class MenuItemController extends Controller
 {
-    public function store(Request $request)
+    public function store(MenuItemPost $request)
     {
-        if (!$request->user()->can('edit-menu')) {
-            return response('Unauthorized', 403);
-        }
+        MenuItem::create($request->validated());
+    }
 
-        $request->validate([
-            'name' => 'required|max:128',
-            'description' => 'required|max:512',
-            'price' => 'required|numeric|min:0',
-            'category_id' => 'required|numeric',
-            'image' => 'required'
-        ]);
-
-        MenuItem::create($request->post());
+    public function update(MenuItemPost $request, MenuItem $menuItem)
+    {
+        $menuItem->update($request->validated());
     }
 }
