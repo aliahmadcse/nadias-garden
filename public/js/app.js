@@ -2100,6 +2100,17 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 
 
+
+function newItem() {
+  return {
+    name: "",
+    price: 0.0,
+    image: "",
+    category_id: "",
+    description: ""
+  };
+}
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["initial-categories", "id"],
   components: {
@@ -2117,13 +2128,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           file.filename = res;
         }
       },
-      item: {
-        name: "",
-        price: 0.0,
-        image: "",
-        category_id: "",
-        description: ""
-      },
+      item: newItem(),
       errors: []
     };
   },
@@ -2135,6 +2140,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         return _this.item = res.data;
       });
     }
+  },
+  // resetting the route after update or create operation
+  beforeRouteLeave: function beforeRouteLeave(to, from, next) {
+    this.item = newItem();
+    next();
   },
   methods: {
     save: function save() {

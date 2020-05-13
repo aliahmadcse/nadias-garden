@@ -27,6 +27,17 @@
 <script>
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
+
+function newItem() {
+    return {
+        name: "",
+        price: 0.0,
+        image: "",
+        category_id: "",
+        description: ""
+    };
+}
+
 export default {
     props: ["initial-categories", "id"],
 
@@ -47,13 +58,8 @@ export default {
                     file.filename = res;
                 }
             },
-            item: {
-                name: "",
-                price: 0.0,
-                image: "",
-                category_id: "",
-                description: ""
-            },
+            item: newItem(),
+
             errors: []
         };
     },
@@ -64,6 +70,12 @@ export default {
                 .get("/api/menu-items/" + this.id)
                 .then(res => (this.item = res.data));
         }
+    },
+
+    // resetting the route after update or create operation
+    beforeRouteLeave: function(to, from, next) {
+        this.item = newItem();
+        next();
     },
 
     methods: {
