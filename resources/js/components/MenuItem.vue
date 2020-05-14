@@ -11,7 +11,7 @@
         <div>
             <select v-model="item.category_id" required>
                 <option value>Select a category</option>
-                <option v-for="cat in initialCategories" :value="cat.id" :key="cat.id">{{cat.name}}</option>
+                <option v-for="cat in categories" :value="cat.id" :key="cat.id">{{cat.name}}</option>
             </select>
         </div>
         <img v-if="id && item.image" :src="`/storage/images/${item.image}`" width="200" />
@@ -27,6 +27,7 @@
 <script>
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
+import { mapState } from "vuex";
 
 function newItem() {
     return {
@@ -39,7 +40,7 @@ function newItem() {
 }
 
 export default {
-    props: ["initial-categories", "id"],
+    props: ["id"],
 
     components: {
         dropZone: vue2Dropzone
@@ -77,6 +78,10 @@ export default {
         this.item = newItem();
         next();
     },
+
+    computed: mapState({
+        categories: "categories"
+    }),
 
     methods: {
         save() {
