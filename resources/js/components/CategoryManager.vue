@@ -28,26 +28,19 @@
 
 <script>
 export default {
-    data: function() {
-        return {
-            feedback: ""
-        };
-    },
-
     computed: {
         categories: function() {
             return this.$store.state.categories;
+        },
+        feedBack: function() {
+            return this.$store.state.feedback;
         }
     },
 
     methods: {
         removeCategory: function(index) {
             if (confirm("Are you sure ?")) {
-                let id = this.categories[index].id;
-                if (id > 0) {
-                    axios.delete("/api/categories/" + id);
-                }
-                this.$store.commit("REMOVE_CATEGORY", index);
+                this.$store.dispatch("removeCategory", index);
             }
         },
 
@@ -65,17 +58,9 @@ export default {
         },
 
         saveCategories: function() {
-            axios
-                .post("/api/categories/upsert", {
-                    categories: this.categories
-                })
-                .then(res => {
-                    if (res.data.success) {
-                        this.feedback = "Changes saved";
-                        this.categories = res.data.categories;
-                    }
-                });
+            this.$store.dispatch("saveCategories");
         },
+
         update: function($event, property, index) {
             this.$store.commit("UPDATE_CATEGORY", {
                 index,
